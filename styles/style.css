@@ -1,0 +1,49 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(90deg, #e66465, #9198e5);
+}
+
+div.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+div.container div.calc {
+  max-width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+}
+div.container div.calc .pic {
+  width: 400px;
+  height: 75px;
+  background-color: gray;
+  color: white;
+  display: flex;
+  justify-content: end;
+  align-items: flex-end;
+  padding: 1rem 2rem;
+}
+div.container div.calc .pic.picTop {
+  font-size: 1.5rem;
+}
+div.container div.calc .pic.picbottom {
+  font-size: 3rem;
+}
+div.container div.calc button {
+  width: 100px;
+  height: 100px;
+  font-size: 3rem;
+  cursor: pointer;
+}
+div.container div.calc button.acc {
+  width: 200px;
+}
+div.container div.calc button.equal {
+  width: 200px;
+}/*# sourceMappingURL=style.css.map */
