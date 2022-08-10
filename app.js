@@ -35,49 +35,6 @@ eight.addEventListener("click", update);
 nine.addEventListener("click", update);
 zero.addEventListener("click", update);
 
-// 輸入數字暫存
-let display = "";
-
-// 第一個值
-let num = 0;
-
-// 第二個值
-let num2 = 0;
-
-// 運算子
-let cal = "";
-
-// 計算總和
-let calculate = num + cal + num2;
-
-// 總和
-let total = 0;
-
-// console.log(total);
-
-// +,-,*,/時顯示在螢幕
-function numCal(e) {
-    
-  if (cal == "") {
-    if(total != 0){
-        num = total;
-        cal = e.target.innerHTML;
-        calculate = num + cal;
-        pictop.innerHTML = calculate;
-        picbottom.innerHTML = num;
-        display = "";
-    }else{
-        num = Number(display);
-        cal = e.target.innerHTML;
-        calculate = num + cal;
-        pictop.innerHTML = calculate;
-        picbottom.innerHTML = num;
-        display = "";
-    }
-
-  }
-}
-
 // 加法
 plus.addEventListener("click", numCal);
 
@@ -90,78 +47,112 @@ take.addEventListener("click", numCal);
 // 除法
 remove.addEventListener("click", numCal);
 
-// 等於
-equal.addEventListener("click", (e) => {
-  if (total == 0) {
-    num2 = Number(display);
-    total = eval(num + cal + num2);
-    picbottom.innerHTML = total;
-    // num = num2;
-    // num2 = 0;
-    cal = "";
-    calculate = "";
-    display = "";
-    // total = 0
-    pictop.innerHTML = calculate;
+// 數字顯示區
+let display = "0";
+
+// 計算總和
+let calculate = "";
+
+// 計算過程是否完成
+let state = true;
+
+// 輸入數字時執行的函式
+function update(e) {
+  // 1.判斷是否有超過長度
+  if (display.length < 12) {
+    // 2.判斷數字顯示區是否為0
+    if (display == "0") {
+      // 3.為0先清空顯示輸入的數字
+      if (e.target.innerHTML != 0) {
+        display = "";
+        display += e.target.innerHTML;
+        picbottom.innerHTML = display;
+      }
+    } else {
+      // 4.不為0檢查計算過程是否完成
+      if (state) {
+        display += e.target.innerHTML;
+        picbottom.innerHTML = display;
+      }else{
+        state = true
+        display = ""
+        display += e.target.innerHTML;
+        picbottom.innerHTML = display;
+      }
+    }
   }
-  console.log(display);
-});
+}
+
+// +,-,*,/時執行的函式
+function numCal(e) {
+  if (calculate != "") {
+    calculate = calculate + display;
+    display = eval(calculate);
+    picbottom.innerHTML = display;
+    calculate = eval(calculate) + e.target.innerHTML;
+    pictop.innerHTML = calculate;
+    // 按下運算子會先顯示完再清空display的值，所以實際上display為空字串
+    display = "";
+  } else {
+    calculate = display + e.target.innerHTML;
+    pictop.innerHTML = calculate;
+    // 按下運算子會先顯示完再清空display的值，所以實際上display為空字串
+    display = "";
+  }
+}
 
 // 初始畫面顯示0
 init();
 function init() {
-  picbottom.innerHTML = total;
+  picbottom.innerHTML = display;
 }
+
+// 等於
+equal.addEventListener("click", (e) => {
+  if (calculate != "") {
+    calculate = calculate + display;
+    display = eval(calculate).toString();
+    picbottom.innerHTML = display;
+    calculate = "";
+    pictop.innerHTML = "";
+    state = false
+  }
+});
 
 // 按下AC時清除數字
 acc.addEventListener("click", (e) => {
-  display = "";
-  num = 0;
-  num2 = 0;
-  cal = "";
+  display = "0";
   calculate = "";
-  total = 0;
   pictop.innerHTML = calculate;
-  picbottom.innerHTML = total;
+  picbottom.innerHTML = display;
 });
 
 // 按下DEL去掉一個數字
 del.addEventListener("click", () => {
   if (display != "") {
-    display = display.slice(0, -1);
-    if (display.length == 0) {
-      picbottom.innerHTML = num;
+    if (display.length == 1) {
+      display = 0;
+      picbottom.innerHTML = display;
     } else {
+      display = display.slice(0, -1);
       picbottom.innerHTML = display;
     }
   }
 });
 
-// 輸入數字時執行的函式
-function update(e) {
-  if (display == "") {
-    if (e.target.innerHTML != "0") {
-      if (display.length < 12) {
-        display += e.target.innerText;
-        picbottom.innerText = display;
+// 按下.的時候
+dot.addEventListener("click", (e) => {
+  if (!display.includes(".")) {
+    if (display == "") {
+      display = 0 + e.target.innerHTML;
+    } else {
+      if(state){
+        display += e.target.innerHTML;
+      }else{
+        state = true
+        display = 0 + e.target.innerHTML;
       }
     }
-  } else {
-    if (display.length < 12) {
-      display += e.target.innerText;
-      picbottom.innerText = display;
-    }
   }
-}
-
-dot.addEventListener("click", (e) => {
-  if (display == "") {
-    display = 0;
-    display += e.target.innerText;
-  }
-
-  if (!display.includes(".")) {
-    display += e.target.innerText;
-  }
-  picbottom.innerText = display;
+  picbottom.innerHTML = display;
 });
