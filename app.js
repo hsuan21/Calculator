@@ -73,9 +73,9 @@ function update(e) {
       if (state) {
         display += e.target.innerHTML;
         picbottom.innerHTML = display;
-      }else{
-        state = true
-        display = ""
+      } else {
+        state = true;
+        display = "";
         display += e.target.innerHTML;
         picbottom.innerHTML = display;
       }
@@ -86,7 +86,15 @@ function update(e) {
 // +,-,*,/時執行的函式
 function numCal(e) {
   if (calculate != "") {
+    // 更換其他運算子時
+    if (display == "" && calculate.slice(-1) != e.target.innerHTML) {
+      calculate = calculate.slice(0, -1) + e.target.innerHTML;
+      pictop.innerHTML =calculate
+      return
+    }
+
     calculate = calculate + display;
+    console.log(calculate);
     display = eval(calculate);
     picbottom.innerHTML = display;
     calculate = eval(calculate) + e.target.innerHTML;
@@ -115,7 +123,7 @@ equal.addEventListener("click", (e) => {
     picbottom.innerHTML = display;
     calculate = "";
     pictop.innerHTML = "";
-    state = false
+    state = false;
   }
 });
 
@@ -131,7 +139,7 @@ acc.addEventListener("click", (e) => {
 del.addEventListener("click", () => {
   if (display != "") {
     if (display.length == 1) {
-      display = 0;
+      display = "0";
       picbottom.innerHTML = display;
     } else {
       display = display.slice(0, -1);
@@ -146,10 +154,10 @@ dot.addEventListener("click", (e) => {
     if (display == "") {
       display = 0 + e.target.innerHTML;
     } else {
-      if(state){
+      if (state) {
         display += e.target.innerHTML;
-      }else{
-        state = true
+      } else {
+        state = true;
         display = 0 + e.target.innerHTML;
       }
     }
